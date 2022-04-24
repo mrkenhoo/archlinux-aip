@@ -21,7 +21,7 @@ namespace archlinux_aip
             Console.WriteLine("\n:: Type the disk you want to format below (e.g.: /dev/sda)");
             string disk = Console.ReadLine();
 
-            if (disk.Contains("/dev/"))
+            if (!disk.Contains("/dev/"))
             {
                 Console.WriteLine($":: ERROR: {disk} Invalid device, try again.");
                 Environment.Exit(1);
