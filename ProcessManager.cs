@@ -16,9 +16,9 @@ namespace archlinux_aip
                 process.WaitForExit();
                 process.Close();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new();
+                Console.WriteLine(ex.ToString());
             }
         }
     }
