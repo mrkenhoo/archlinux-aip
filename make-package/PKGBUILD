@@ -24,6 +24,8 @@ package() {
         install -Dm 644 $f $pkgdir/usr/share/archlinux-aip/
     done
     install -Dm 755 $srcdir/archlinux-aip/bin/Release/net6.0/linux-x64/archlinux-aip $pkgdir/usr/share/archlinux-aip/archlinux-aip
+    install -Dm 644 $srcdir/archlinux-aip/LICENSE $pkgdir/usr/share/archlinux-aip/LICENSE
+
     ln -sf "/usr/share/archlinux-aip/archlinux-aip" "${pkgdir}/usr/bin/archlinux-aip"
 }
 
