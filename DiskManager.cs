@@ -17,10 +17,11 @@ namespace archlinux_aip
                 if (string.IsNullOrEmpty(bootSize)) { bootSize = "500M"; };
                 if (string.IsNullOrEmpty(bootSize)) { rootSize = "100G"; };
 
+                ProcessManager.StartProcess(fileName: "partprobe", $"{disk}");
+                ProcessManager.StartProcess(fileName: "umount", "-Rv /mnt");
+
                 ProcessManager.StartProcess(fileName: "sgdisk", args: $"-Z {disk}");
-
                 ProcessManager.StartProcess(fileName: "sgdisk", args: $"-a 2048 -o {disk}");
-
                 ProcessManager.StartProcess(fileName: "sgdisk", args: $"-n 1::+{bootSize} --typecode=1:ef00 --change-name=1:BOOT {disk}");
                 ProcessManager.StartProcess(fileName: "sgdisk", args: $"-n 2::+{rootSize} --typecode=2:8300 --change-name=2:root {disk}");
                 ProcessManager.StartProcess(fileName: "sgdisk", args: $"-n 3::-0 --typecode=3:8300 --change-name=3:home {disk}");
@@ -40,7 +41,7 @@ namespace archlinux_aip
             {
                 if (filesystem != "ext4")
                 {
-                    Console.WriteLine($":: ERROR: {filesystem}: filesystem not yet implemented, use EXT4 instead");
+                    Console.WriteLine($":: ERROR: {filesystem}: filesystem not supported, use EXT4 instead");
                     Environment.Exit(1);
                 }
 
