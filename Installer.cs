@@ -13,12 +13,25 @@ namespace archlinux_aip
                 if (!disk.Contains("nvme"))
                 {
                     ProcessManager.StartProcess(fileName: "mount", args: $"-v {disk}2 /mnt");
+
+                    if (!Directory.Exists("/mnt/boot") && !Directory.Exists("/mnt/home"))
+                    {
+                        ProcessManager.StartProcess(fileName: "mkdir", args: "-v /mnt/boot");
+                        ProcessManager.StartProcess(fileName: "mkdir", args: "-v /mnt/home");
+                    }
+
                     ProcessManager.StartProcess(fileName: "mount", args: $"-v {disk}1 /mnt/boot");
                     ProcessManager.StartProcess(fileName: "mount", args: $"-v {disk}3 /mnt/home");
                 }
                 else
                 {
                     ProcessManager.StartProcess(fileName: "mount", args: $"-v {disk}p2 /mnt");
+
+                    if (!Directory.Exists("/mnt/boot") && !Directory.Exists("/mnt/home"))
+                    {
+                        ProcessManager.StartProcess(fileName: "mkdir", args: "-v /mnt/boot");
+                        ProcessManager.StartProcess(fileName: "mkdir", args: "-v /mnt/home");
+                    }
                     ProcessManager.StartProcess(fileName: "mount", args: $"-v {disk}p1 /mnt/boot");
                     ProcessManager.StartProcess(fileName: "mount", args: $"-v {disk}p3 /mnt/home");
                 }
@@ -34,7 +47,7 @@ namespace archlinux_aip
         {
             string packages = "base base-devel linux-lts linux-zen linux-firmware intel-ucode amd-ucode";
             ProcessManager.StartProcess(fileName: "pacstrap", args: $"/mnt {packages}");
-            ProcessManager.StartProcess(fileName: "genfstab", args: "-U /mnt/etc/fstab");
+            ProcessManager.StartProcess(fileName: "genfstab", args: "-U /mnt >> /mnt/etc/fstab");
 
             ProcessManager.StartProcess(fileName: "arch-chroot",
                                         args: "/mnt ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime");
@@ -80,6 +93,8 @@ namespace archlinux_aip
                         Console.WriteLine(s);
                     }
                 }
+
+                ProcessManager.StartProcess(fileName: "cp", args: "cp -v /root/archlinux.conf /boot/loader/entries");
             }
             catch (Exception ex)
             {
