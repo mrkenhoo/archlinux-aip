@@ -65,36 +65,20 @@ namespace archlinux_aip
 
         public static void InstallBootloader(string disk)
         {
-            string filePath = @"/root/archlinux.conf";
             ProcessManager.StartProcess(fileName: "arch-chroot", args: "/mnt bootctl install");
             try
             {
-                using (FileStream fs = File.Create(filePath))
+                string[] file =
                 {
-                    byte[] title = new UTF8Encoding(true).GetBytes("title   Arch Linux");
-                    byte[] linux = new UTF8Encoding(true).GetBytes("linux   /vmlinuz-linux");
-                    byte[] initrd1 = new UTF8Encoding(true).GetBytes("initrd  /intel-ucode.img");
-                    byte[] initrd2 = new UTF8Encoding(true).GetBytes("initrd  /amd-ucode.img");
-                    byte[] initrd3 = new UTF8Encoding(true).GetBytes("initrd  /initramfs-linux.img");
-                    byte[] options = new UTF8Encoding(true).GetBytes("options root=UUID=device_uuid_here rw add_efi_memmap delayacct quiet splash");
-                    fs.Write(title, 0, title.Length);
-                    fs.Write(linux, 1, linux.Length);
-                    fs.Write(initrd1, 2, initrd1.Length);
-                    fs.Write(initrd2, 3, initrd2.Length);
-                    fs.Write(initrd3, 4, initrd3.Length);
-                    fs.Write(options, 5, options.Length);
-                }
+                    "title   Arch Linux",
+                    "linux   /vmlinuz-linux",
+                    "initrd  /intel-ucode.img",
+                    "initrd  /amd-ucode.img",
+                    "initrd  /initramfs-linux.img",
+                    "options root=UUID=device_uuid_here rw add_efi_memmap delayacct quiet splash"
+                };
 
-                using (StreamReader sr = File.OpenText(filePath))
-                {
-                    string s = "";
-                    while ((s = sr.ReadLine()) != null)
-                    {
-                        Console.WriteLine(s);
-                    }
-                }
-
-                ProcessManager.StartProcess(fileName: "cp", args: "cp -v /root/archlinux.conf /boot/loader/entries");
+                File.WriteAllLines("/boot/loader/entries/archlinux.conf", file);
             }
             catch (Exception ex)
             {
