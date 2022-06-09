@@ -46,7 +46,7 @@ namespace archlinux_aip
         {
             string packages = "base base-devel linux-lts linux-zen linux-firmware intel-ucode amd-ucode";
             ProcessManager.StartProcess(fileName: "pacstrap", args: $"/mnt {packages}");
-            ProcessManager.StartProcess(fileName: "genfstab", args: "-U /mnt >> /mnt/etc/fstab");
+            ProcessManager.StartProcess(fileName: "genfstab", args: "-t PARTUUID /mnt >> /mnt/etc/fstab");
 
             ProcessManager.StartProcess(fileName: "arch-chroot",
                                         args: "/mnt ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime");
