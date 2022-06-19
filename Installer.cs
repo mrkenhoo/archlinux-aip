@@ -74,7 +74,7 @@ namespace archlinux_aip
                     "initrd  /intel-ucode.img",
                     "initrd  /amd-ucode.img",
                     "initrd  /initramfs-linux.img",
-                    "options root=UUID=device_uuid_here rw add_efi_memmap delayacct quiet splash"
+                    "options root=PARTUUID=device_partuuid_here rw add_efi_memmap delayacct quiet splash"
                 };
 
                 File.WriteAllLines("/boot/loader/entries/archlinux.conf", file);
@@ -82,6 +82,14 @@ namespace archlinux_aip
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+            }
+            if (!disk.Contains("nvme"))
+            {
+                ProcessManager.StartProcess(fileName: "arch-chroot", args: $"/mnt sed 's,PARTUUID=device_partuuid_here,PARTUUID=`blkid -s PARTUUID -o value {disk}1`,g -i /boot/loader/entries/archlinux.conf")
+            }
+            else
+            {
+                ProcessManager.StartProcess(fileName: "arch-chroot", args: $"/mnt blkid -s PARTUUID -o value {disk}p1")
             }
         }
     }
