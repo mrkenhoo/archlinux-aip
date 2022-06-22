@@ -44,7 +44,7 @@ namespace archlinux_aip
 
         public static void InstallBaseSystem()
         {
-            string packages = "base base-devel linux-lts linux-zen linux-firmware intel-ucode amd-ucode";
+            string packages = "base base-devel linux linux-firmware intel-ucode amd-ucode";
             ProcessManager.StartProcess(fileName: "pacstrap", args: $"/mnt {packages}");
             ProcessManager.StartProcess(fileName: "genfstab", args: "-t PARTUUID /mnt >> /mnt/etc/fstab");
 
@@ -74,7 +74,7 @@ namespace archlinux_aip
                     "initrd  /intel-ucode.img",
                     "initrd  /amd-ucode.img",
                     "initrd  /initramfs-linux.img",
-                    "options root=PARTUUID=device_partuuid_here rw add_efi_memmap delayacct quiet splash"
+                    "options root=PARTUUID=device_partuuid_here rw add_efi_memmap quiet splash"
                 };
 
                 File.WriteAllLines("/boot/loader/entries/archlinux.conf", file);
@@ -85,11 +85,11 @@ namespace archlinux_aip
             }
             if (!disk.Contains("nvme"))
             {
-                ProcessManager.StartProcess(fileName: "arch-chroot", args: $"/mnt sed 's,PARTUUID=device_partuuid_here,PARTUUID=`blkid -s PARTUUID -o value {disk}1`,g -i /boot/loader/entries/archlinux.conf")
+                ProcessManager.StartProcess(fileName: "arch-chroot", args: $"/mnt sed 's,PARTUUID=device_partuuid_here,PARTUUID=`blkid -s PARTUUID -o value {disk}1`,g' -i /boot/loader/entries/archlinux.conf");
             }
             else
             {
-                ProcessManager.StartProcess(fileName: "arch-chroot", args: $"/mnt blkid -s PARTUUID -o value {disk}p1")
+                ProcessManager.StartProcess(fileName: "arch-chroot", args: $"/mnt blkid -s PARTUUID -o value {disk}p1");
             }
         }
     }
