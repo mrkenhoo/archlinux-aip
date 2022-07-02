@@ -6,26 +6,28 @@ url="https://github.com/mrkenhoo/archlinux-aip"
 license=('GPL')
 arch=('x86_64')
 makedepends=(dotnet-sdk dotnet-targeting-pack make)
-depends=(dotnet-runtime)
 source=("git+https://github.com/mrkenhoo/archlinux-aip.git")
 sha256sums=('SKIP')
 options=(!strip)
 
-build() {
-    cd $srcdir/archlinux-aip && make
+build()
+{
+    cd ${srcdir}/archlinux-aip && make
 }
 
-package() {
-    [ ! -d "$pkgdir/usr/share/archlinux-aip" ] && mkdir -pv $pkgdir/usr/share/archlinux-aip
-    [ ! -d "$pkgdir/usr/bin/" ] && mkdir -pv $pkgdir/usr/bin
+package()
+{
+    [ ! -d "${pkgdir}/usr/share/archlinux-aip" ] && mkdir -pv ${pkgdir}/usr/share/archlinux-aip
+    [ ! -d "${pkgdir}/usr/share/doc/archlinux-aip" ] && mkdir -pv ${pkgdir}/usr/share/doc/archlinux-aip
+    [ ! -d "${pkgdir}/usr/bin/" ] && mkdir -pv ${pkgdir}/usr/bin
 
-    cd $srcdir/archlinux-aip/bin/Release/net6.0/linux-x64
-    for f in `pwd`/*.*; do
-        install -Dm 644 $f $pkgdir/usr/share/archlinux-aip/
+    cd ${srcdir}/archlinux-aip/bin/Release/net6.0/linux-x64
+    for f in ${srcdir}/archlinux-aip/bin/Release/net6.0/linux-x64/*.*
+    do
+        install -v -Dm 644 ${f} ${pkgdir}/usr/share/archlinux-aip/
     done
-    install -Dm 755 $srcdir/archlinux-aip/bin/Release/net6.0/linux-x64/archlinux-aip $pkgdir/usr/share/archlinux-aip/archlinux-aip
-    install -Dm 644 $srcdir/archlinux-aip/LICENSE $pkgdir/usr/share/archlinux-aip/LICENSE
+    install -v -Dm 755 ${srcdir}/archlinux-aip/bin/Release/net6.0/linux-x64/archlinux-aip ${pkgdir}/usr/share/archlinux-aip/archlinux-aip
+    install -v -Dm 644 ${srcdir}/archlinux-aip/LICENSE ${pkgdir}/usr/share/doc/archlinux-aip/LICENSE
 
     ln -sf "/usr/share/archlinux-aip/archlinux-aip" "${pkgdir}/usr/bin/archlinux-aip"
 }
-
