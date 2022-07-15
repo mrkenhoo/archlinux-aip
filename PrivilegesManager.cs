@@ -18,3 +18,4 @@ namespace archlinux_aip
         }
     }
 }
+

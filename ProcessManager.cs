@@ -23,3 +23,4 @@ namespace archlinux_aip
         }
     }
 }
+

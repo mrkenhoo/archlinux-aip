@@ -35,7 +35,7 @@ namespace archlinux_aip
 
             DiskManager.FormatDisk(disk: $"{disk}", bootSize: $"{bootSize}", rootSize: $"{rootSize}");
 
-            Console.WriteLine("\n[INFO] Available filesystems are: ext4\n:: Specify the filesystem to use below (default: none)");
+            Console.WriteLine("\n[INFO] Available filesystems are: ext4\n:: Specify the filesystem to use below (default: ext4)");
             string filesystem = Console.ReadLine();
 
             DiskManager.InstallFilesystem(filesystem: $"{filesystem}", disk: $"{disk}");
